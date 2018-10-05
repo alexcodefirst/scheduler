@@ -8,7 +8,7 @@ namespace Scheduler.Infrastructure
     {
         public override void Load()
         {
-            Kernel?.Bind<IJob>().To<NotifyJob>().Named("TestTask");
+            Kernel?.Bind<IJob>().To<NotifyJob>().Named("NotifyJob");
         }
     }
 }
