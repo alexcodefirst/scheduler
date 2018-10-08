@@ -9,10 +9,10 @@ namespace Scheduler.Infrastructure.Extensions
     {
         public static string ToCompleteMessage(this Exception exception)
         {
-            var b = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             GetExceptions(exception).ToList()
-                .ForEach(x => b.AppendFormat("{0}{1}", x.Message, Environment.NewLine));
-            return b.ToString();
+                .ForEach(x => stringBuilder.AppendFormat("{0}{1}", x.Message, Environment.NewLine));
+            return stringBuilder.ToString();
         }
 
         private static IEnumerable<Exception> GetExceptions(Exception exception)
