@@ -33,7 +33,9 @@ namespace Scheduler.Infrastructure.Concrete
                     if (_alreadyTaskedToExit) return;
 
                     _alreadyTaskedToExit = true;
-                    _logger.Info("Config file was changed, restarting service...");
+
+                    _logger.Info("The config file was changed, restarting service...");
+
                     Environment.Exit(1);
                 }
             };
@@ -47,7 +49,8 @@ namespace Scheduler.Infrastructure.Concrete
             if (!_stopEvent.WaitOne(0))
             {
                 Task.Factory.StartNew(Watcher);
-                _logger.Info("Config file watcher started");
+
+                _logger.Info("The config file watcher was started");
             }
         }
 
@@ -56,7 +59,8 @@ namespace Scheduler.Infrastructure.Concrete
             if (!_stopEvent.WaitOne(0))
             {
                 _stopEvent.Set();
-                _logger.Info("Config file watcher stopped");
+
+                _logger.Info("The config file watcher was stopped");
             }
         }
     }

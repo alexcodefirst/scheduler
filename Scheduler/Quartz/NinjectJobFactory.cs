@@ -24,12 +24,14 @@ namespace Scheduler.Quartz
             lock (_locker)
             {
                 var jobName = bundle.JobDetail.Key.Name;
+
                 try
                 {
                     var isJobExcecuting = scheduler.GetCurrentlyExecutingJobs().Any(x => x.JobDetail.Key.Name == jobName);
+
                     if (isJobExcecuting)
                     {
-                        throw new Exception("Job already working");
+                        throw new Exception("The job already working");
                     }
 
                     return _kernel.Get<IJob>(jobName);
@@ -37,6 +39,7 @@ namespace Scheduler.Quartz
                 catch (Exception ex)
                 {
                     _logger.Warn("The job '{0}' could not be extracted, considered to skip ({1})", jobName, ex.Message);
+
                     return null;
                 }
             }

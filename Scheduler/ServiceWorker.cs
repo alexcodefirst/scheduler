@@ -23,7 +23,7 @@ namespace Scheduler
             _scheduler.JobFactory = kernel.Get<IJobFactory>();
             _watcher = new ConfigFileWatcher(_logger);
 
-            _logger.Info("Scheduler service worker initialized");
+            _logger.Info("Scheduler service worker was initialized");
 
             AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
@@ -36,13 +36,15 @@ namespace Scheduler
             //AddHostControlJob(hc);
 
             _logger.Info("Reading configuration");
-            var connectionManagerDataSection =
-                ConfigurationManager.GetSection(SchedulerTimeTableSection.SectionName) as SchedulerTimeTableSection;
+
+            var connectionManagerDataSection = ConfigurationManager.GetSection(SchedulerTimeTableSection.SectionName) as SchedulerTimeTableSection;
+            
             if (connectionManagerDataSection != null)
             {
                 _logger.Info("{0} jobs have been read", connectionManagerDataSection.TimeTable.Count);
 
                 _scheduler.Start();
+
                 foreach (var item in connectionManagerDataSection.TimeTable)
                 {
                     AddJob((SchedulerTimeTableItem) item);
@@ -51,16 +53,19 @@ namespace Scheduler
                 _watcher.Start();
 
                 _logger.Info("Scheduler service worker was started");
+
                 return true;
             }
-            _logger.Error("Failed to read job configuration, scheduler will be stopped");
+            _logger.Error("Failed to read the job configuration, scheduler will be stopped");
+
             hc.Stop();
+
             return true;
         }
 
         private void AddJob(SchedulerTimeTableItem item)
         {
-            _logger.Info("Trying to add '{0}' job into schedule", item.TaskName);
+            _logger.Info("Trying to add '{0}' a job into schedule", item.TaskName);
             try
             {
                 var jobDetail = JobBuilder.Create()
@@ -70,11 +75,11 @@ namespace Scheduler
                     .WithCronSchedule(item.Trigger)
                     .Build();
                 _scheduler.ScheduleJob(jobDetail, jobTrigger );
-                _logger.Info("Job '{0}' added successfully", item.TaskName);
+                _logger.Info("The Job was '{0}' added successfully", item.TaskName);
             }
             catch (Exception ex)
             {
-                _logger.Error("Job add error: {0}", ex.Message);
+                _logger.Error("Job Error: {0}", ex.Message);
             }
         }
 
